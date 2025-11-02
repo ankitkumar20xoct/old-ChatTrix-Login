@@ -1,0 +1,153 @@
+/* Whole screen layout */
+.login-container {
+  display: flex;
+  height: 105vh;
+  background-color: rgb(250, 150, 20);
+}
+
+/* Left section image */
+.left-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.side-image {
+  width: 90%;
+  border-radius: 12px;
+}
+
+/* Right section with form */
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 20px 0 0 20px;
+  padding: 10px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 10px;
+}
+
+/* ChatTrix name */
+.brand-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: rgb(250, 150, 20);
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+input {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.login-btn {
+  background-color: rgb(250, 150, 20);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.login-btn:hover {
+  background-color: rgb(230, 130, 10);
+}
+
+/* Forgot password */
+.forgot-password {
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  color: rgb(250, 150, 20);
+  text-decoration: none;
+  font-size: 16px;
+}
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: 20px 0;
+  position: relative;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  height: 1px;
+  background: #ccc;
+  flex: 1;
+}
+.divider span {
+  margin: 0 10px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Social icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.icon img {
+  width: 35px;
+  height: 35px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.icon img:hover {
+  transform: scale(1.1);
+}
+
+/* Signup text */
+.signup-text {
+  margin-top: 20px;
+  font-size: 16px;
+}
+.signup-text a {
+  color: rgb(250, 150, 20);
+  text-decoration: none;
+  font-weight: 600;
+}
+.signup-text a:hover {
+  text-decoration: underline;
+}
