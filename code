@@ -1,0 +1,24 @@
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+  // demo model
+  email = '';
+  password = '';
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      // yahan backend call ya service call krna hai
+      console.log('Form submitted', form.value);
+      // example: show alert (replace with real auth)
+      alert('Logging in with: ' + JSON.stringify(form.value));
+    } else {
+      alert('Please fill the form correctly');
+    }
+  }
+}
