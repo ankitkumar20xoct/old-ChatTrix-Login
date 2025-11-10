@@ -1,24 +1,53 @@
-import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+Theek hai bhai 😎, simple style me bataata hu kaise use karna hai **button me**:
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
-export class LoginComponent {
-  // demo model
-  email = '';
-  password = '';
+---
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      // yahan backend call ya service call krna hai
-      console.log('Form submitted', form.value);
-      // example: show alert (replace with real auth)
-      alert('Logging in with: ' + JSON.stringify(form.value));
-    } else {
-      alert('Please fill the form correctly');
-    }
-  }
+### 1️⃣ CSS bana lo
+
+```css
+/* styles.css ya component ke CSS file me */
+.disabled-btn {
+  background-color: gray;
+  cursor: not-allowed;
 }
+
+.active-btn {
+  background-color: orange;
+  cursor: pointer;
+}
+```
+
+---
+
+### 2️⃣ Button HTML me ngClass use karo
+
+```html
+<button
+  [ngClass]="{ 'disabled-btn': !email || !password, 'active-btn': email && password }"
+  [disabled]="!email || !password">
+  Login
+</button>
+```
+
+* `[ngClass]` → decide karta hai kaunsi class apply hogi.
+* `[disabled]` → button disable ya enable karega, same condition ke saath.
+
+---
+
+### 3️⃣ Component me variables define karo
+
+```ts
+email = '';
+password = '';
+```
+
+* Ye variables input fields se bind honge `(ngModel)` ke through.
+* Jaise hi user input karega, button ki class automatically change ho jaayegi.
+
+---
+
+Bhai, isse button **dynamic color aur enable/disable dono** kaam karenge.
+
+Agar chaahe to mai **full login form ka example** `ngClass` ke saath bana ke dikha du.
+
+Chahoge mai wo bhi bana du?
