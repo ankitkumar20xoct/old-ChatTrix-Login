@@ -1,0 +1,65 @@
+<div class="login-container" [ngClass]="{'dark-mode': isLoggedIn}">
+  <!-- Left section: Image -->
+  <div class="left-section">
+    <img src="./Chattrix_image.png" alt="App image" class="side-image" />
+  </div>
+
+  <!-- Right section -->
+  <div class="right-section">
+    <img src="./logo.png" alt="Company Logo" class="logo" />
+    <h1 class="brand-name">ChatTrix</h1>
+
+    <h2>Login</h2>
+
+    <!-- Login form -->
+    <form>
+      <input *ngIf="!isLoggedIn" type="email" placeholder="Email" required />
+      <input *ngIf="!isLoggedIn" type="password" placeholder="Password" required />
+      <button type="submit" class="login-btn" [disabled]="isDisabled">Login</button>
+      <a href="#" class="forgot-password" [hidden]="isLoggedIn">Forgot Password?</a>
+    </form>
+
+    <!-- Example: ngSwitch directive -->
+    <div class="mode-container" [ngSwitch]="loginMode">
+      <p *ngSwitchCase="'email'">📧 Logging in via <strong>Email</strong></p>
+      <p *ngSwitchCase="'phone'">📱 Logging in via <strong>Phone Number</strong></p>
+      <p *ngSwitchCase="'username'">👤 Logging in via <strong>Username</strong></p>
+      <p *ngSwitchDefault>🔑 Selecting login option...</p>
+    </div>
+
+    <!-- OR divider -->
+    <div class="divider">
+      <span>OR</span>
+    </div>
+
+    <!-- Social icons -->
+    <div class="social-icons" [ngStyle]="{'opacity': isLoggedIn ? 0.5 : 1}">
+      <div
+        class="icon"
+        *ngFor="let social of socialOptions; let i = index"
+        [title]="'Login with ' + social"
+      >
+        <img [src]="'./' + social.toLowerCase() + '.png'" [alt]="social + ' Icon'" />
+        <span>{{ social }}</span>
+      </div>
+    </div>
+
+    <!-- Signup link -->
+    <p class="signup-text">
+      New user? <a href="#">Sign up</a>
+    </p>
+
+    <!-- Announcements Section -->
+    <div class="announcements" *ngIf="showAnnouncements">
+      <h3>📢 Announcements</h3>
+      <ul>
+        <li
+          *ngFor="let item of announcements; let idx = index"
+          [ngStyle]="{'font-weight': idx < 3 ? 'bold' : 'normal'}"
+        >
+          {{ idx + 1 }}. {{ item }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
