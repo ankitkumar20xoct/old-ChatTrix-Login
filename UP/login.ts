@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +23,8 @@ export class LoginComponent {
     '🔒 New security policy update',
     '⚙️ Scheduled maintenance at 2 AM',
     '✅ Two-Factor Authentication available!',
-    '🆕 New dashboard design introduced',
-    '💡 Performance improvements in login speed',
     '📱 Mobile app update now live on Play Store',
   ];
+  constructor(private loginService: LoginService){
+  }
 }
