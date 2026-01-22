@@ -54,3 +54,7 @@ Chahoge mai wo bhi bana du?
 
 set PATH=C:\Users\akumar34\Downloads\Java\jdk-21\bin;%PATH%
 
+cd C:\Users\akumar34\Downloads\eclipse
+eclipse.exe
+
+
