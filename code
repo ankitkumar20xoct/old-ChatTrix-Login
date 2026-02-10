@@ -59,5 +59,36 @@ eclipse.exe
 
 "C:\Users\akumar34\eclipse\eclipse.exe"
 
+package com.selenium.firsttest;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class FirstSeleniumTest {
+
+    public static void main(String[] args) {
+
+        // 1️⃣ ChromeDriver setup
+        WebDriverManager.chromedriver().setup();
+
+        // 2️⃣ Browser launch
+        WebDriver driver = new ChromeDriver();
+
+        // 3️⃣ Open website
+        driver.get("https://www.google.com");
+
+        // 4️⃣ Wait for few seconds (just to see browser)
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // 5️⃣ Close browser
+        driver.quit();
+    }
+}
 
 
