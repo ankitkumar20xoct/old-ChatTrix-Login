@@ -83,24 +83,20 @@ public class FirstSeleniumTest {
 
 <dependencies>
 
-<dependency>
+        <!-- Selenium -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.18.1</version>
+        </dependency>
 
-<groupId>org.seleniumhq.selenium</groupId>
+        <!-- WebDriverManager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.7.0</version>
+        </dependency>
 
-<artifactId>selenium-java</artifactId>
+    </dependencies>
 
-<version>4.4.0</version>
-
-</dependency>
-
-<dependency>
-
-<groupId>org.testng</groupId>
-
-<artifactId>testng</artifactId>
-
-<version>7.3.0</version>
-
-</dependency>
-
-</dependencies>
+</project>
