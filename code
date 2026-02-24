@@ -137,3 +137,7 @@ public class LaunchBrowser {
     }
 }
 
+
+cy.get('input[type="radio"][name*="increaseInCoverageA"][value="yes"]')
+  .check()
+  .should('be.checked')
