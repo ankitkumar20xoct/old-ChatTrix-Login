@@ -138,6 +138,11 @@ public class LaunchBrowser {
 }
 
 
-cy.get('input[type="radio"][name*="increaseInCoverageA"][value="yes"]')
-  .check()
-  .should('be.checked')
+cy.get('textarea[placeholder="Enter description here"]')
+  .clear()
+  .type('This is automation testing comment')
+  .should('have.value', 'This is automation testing comment')
+
+cy.get('textarea[name*="additionalComments"]')
+  .clear({ force: true })
+  .type('Automation comment', { force: true })
