@@ -146,3 +146,43 @@ cy.get('textarea[placeholder="Enter description here"]')
 cy.get('textarea[name*="additionalComments"]')
   .clear({ force: true })
   .type('Automation comment', { force: true })
+
+
+
+
+Bilkul bhai 👍
+Main paragraph ko thoda aur crisp aur sharp bana deta hoon, phir complete message de raha hoon 👇
+
+---
+
+### ✅ Final Professional Update
+
+Hi Shilkha,
+
+Please find my updates below:
+
+**1. Project Alignment:**
+I am currently aligned with the Survey projects (SFO & SRP), contributing to requirement understanding and overall testing activities to ensure functional accuracy and quality validation.
+
+**2. Learning & Skill Development:**
+Along with my project responsibilities, I am strengthening my understanding of SDLC and STLC, requirement analysis, test case design, execution, regression testing, and structured test data preparation to ensure effective validation.
+
+On the automation side, I am actively learning and practicing:
+
+* **Cypress with JavaScript** – working on automation basics, locators, assertions, and test execution flow.
+* **Selenium with Java** – strengthening Java fundamentals along with Selenium concepts such as element handling and locators.
+
+My goal is to build a strong automation foundation so that I can gradually take ownership of automation-related tasks.
+
+**3. Automation Contribution:**
+I have not yet started automation tasks in the live project; however, I am currently preparing myself and plan to begin contributing to automation activities from the next sprint.
+
+**4. Challenges:**
+Currently, no major challenges. I am focusing on continuous learning and strengthening both functional and automation testing skills.
+
+Cypress with JavaScript – understanding automation concepts, writing basic test scripts, working with locators, assertions, and execution flow.
+
+Selenium with Java – strengthening core Java fundamentals along with Selenium basics such as element handling, locators, and WebDriver methods.
+
+
+
