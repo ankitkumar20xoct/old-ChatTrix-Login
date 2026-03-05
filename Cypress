@@ -1,0 +1,606 @@
+import { normalizeText, getPageTitle, clickOnElement } from "../utils/commonUtils";
+import { softAssert } from "../support/softAsserts";
+
+
+/**
+ * ============================================================
+ *  FORM HEADER VALIDATION COMPONENT
+ *  This file validates elements found at the top of every form:
+ *   - Form Title
+ *   - Form Header
+ *   - 
+ *
+ *  Author: Manu Arya
+ * ============================================================
+ */
+
+
+
+
+
+export class FormHeader {
+    
+    
+    static Element = {
+
+        mainPageContainer: '.page-main-container:visible',
+        formHeader: "h1:visible",
+        topActionContainer1: '.col-lg-6.col-md-4.col-8-custom.text-right.print-hide.pl-0.ng-star-inserted',
+        printIcon: '.icon-print-forms.icon.btn.btn-outline-secondary.me-2.icon-spacing',
+        ActionbtnTxt: '.text-link',
+        bottomActionContainer: '.col-lg-12.col-12-custom.text-right.print-hide',
+        mandatoryMessage: '.form-text.error:visible',
+        validateIcon: '.icon-validate.icon.btn.btn-outline-secondary.me-2.icon-spacing',
+        sectionPanel: '.card-header.bg-default:visible',
+        topActionContainer2: '.col-lg-12.col-12.text-right',
+        topActionbtn: '.btn.btn-link.d-inline-flex.pt-0.pe-lg-3.pr-3.pb-0.ps-0',
+        collpaseAllIcon: '.icon.icon-collapse.btn.btn-outline-secondary.me-2.icon-spacing',
+        expandAllAndExpandIncompletedIcon: '.icon.icon-expand.btn.btn-outline-secondary.me-2.icon-spacing',
+        sectionPanelExpandIcon: '.formio-collapse-icon.fa.fa-minus-square-o.text-muted',
+        sectionPanelCollapseIcon: '.formio-collapse-icon.fa.fa-plus-square-o.text-muted',
+        sectionPanelGreenIcon: '.fa.fa-lg.float-right.icon-white-green-complete',
+        sectionPanelErrorIcon: '.fa.fa-lg.float-right.icon-white-red-error'
+
+
+        
+    };
+    
+    
+    /**
+     * verifyTheFormTitle(sheetName)
+     * ------------------------------------------------------------
+     * Validates that:
+     *  1. Browser tab title exists
+     *  2. Title matches the expected `FormName` through Script
+     *
+     * @param {string} FormName - Expected title from Excel
+     */
+    static verifyTheFormTitle(FormName) {
+
+        if(!FormName)
+            throw new Error("ERROR: No 'FormName' found in Script — please check your Script.")
+ 
+        getPageTitle()
+        .should('not.eq','FormRenderer')
+        .then((title) => {
+ 
+            // 1. Normalize both texts before comparing
+            const uiTitle = normalizeText(title);
+            const expectedTitle = normalizeText(FormName)
+ 
+            // 2. Final assertion
+            softAssert(
+                () => expect(uiTitle).to.eq(expectedTitle),
+                `Page Title text match -> UI:"${uiTitle}" | EXPECTED: "${expectedTitle}"`
+            )
+
+        });
+
+    }
+    
+    
+    static verifyTheFormHeader(FormName) {
+
+        if(!FormName)
+            throw new Error("ERROR: No 'FormName' found in Script — please check your Script.")
+
+        // STEP 1: HARD - ASSERT
+        cy.get(this.Element.formHeader)
+          .should('exist')
+          .should('be.visible')
+          .should('have.length', 1)
+
+        // STEP 2: Validate header text ( SOFT ASSERT )
+        cy.get(this.Element.formHeader)
+          .invoke('text')
+          .then((headerTxt) => {
+
+            const uiHeaderTxt = normalizeText(headerTxt)
+            const expectedHeaderTxt = normalizeText(FormName)
+
+            softAssert(
+                () => expect(uiHeaderTxt).to.eq(expectedHeaderTxt),
+                `Form Header text match -> UI:"${uiHeaderTxt}" | EXPECTED: "${expectedHeaderTxt}"`
+            )
+
+          })
+
+        //STEP 3: validate header CSS ( SOFT ASSERT )
+        cy.get(this.Element.formHeader)
+        .then((el) => {
+
+            softAssert(
+                () => expect(el).to.have.css('color', 'rgb(53, 53, 53)'),
+                `Header Text color match`
+            )
+
+            softAssert(
+                () => expect(el).to.have.css('font-size', '20px'),
+                `Header Text font-size match`
+            )
+
+            softAssert(
+                () => expect(el).to.have.css('font-family').match(/montserrat/i),
+                `Header Text font-family match`
+            )
+
+        })
+    }
+
+
+    static verifyThePrintButtonVisibility() {
+
+        //step 1: traversing from upper action button Container to upper print button 
+        cy.get(this.Element.topActionContainer1)
+          .children()
+          .eq(0)
+          .as('upperPrintBtnContainer')
+
+        //step 2: validating visiblity of icon in print button
+        cy.get('@upperPrintBtnContainer')
+          .find(this.Element.printIcon)
+          .should('exist')
+          .should('be.visible')
+
+        //step 3: validating visibility && correctness of print text in print button
+        cy.get('@upperPrintBtnContainer')
+          .find(this.Element.ActionbtnTxt)
+          .should('exist')
+          .should('be.visible')
+          .invoke('text')
+          .then((txt) => {
+            
+                softAssert(
+                () => expect(txt).to.eq('Print Form'),
+                `Upper Print Button Text match`
+            )
+               
+          })
+
+
+        //step 4: traversing from lower action button Container to lower print button 
+        cy.get(this.Element.bottomActionContainer)
+          .children()
+          .eq(0)
+          .as('lowerPrintBtnContainer')
+
+        //step 5: validating visiblity of icon in print button
+        cy.get('@lowerPrintBtnContainer')
+          .find(this.Element.printIcon)
+          .should('exist')
+          .should('be.visible')
+
+        //step 6: validating visibility && correctness of print text in print button
+        cy.get('@lowerPrintBtnContainer')
+          .find(this.Element.ActionbtnTxt)
+          .should('exist')
+          .should('be.visible')
+          .invoke('text')
+          .then((txt) => {
+            
+                softAssert(
+                () => expect(txt).to.eq('Print Form'),
+                `lower Print Button Text match`
+            )
+               
+          })
+          
+    }
+
+
+    
+
+    static verifyByDefaultFieldsHaveNoErrorMessage() {
+
+    cy.get(this.Element.mainPageContainer)
+      .then($mainPageContainer => {
+
+        const errorMessageCount = $mainPageContainer.find(this.Element.mandatoryMessage).length
+
+
+          softAssert(
+                () => expect(errorMessageCount).to.eq(0),
+                `field have default error message`
+          )
+
+      })
+    }
+
+
+
+
+    static verifyTheValidateButtonVisibility() {
+
+      
+        //step 1: traversing from upper action button Container to upper validate button 
+        cy.get(this.Element.topActionContainer1)
+          .children()
+          .eq(1)
+          .as('upperValidateBtnContainer')
+
+        //step 2: validating visiblity of icon in validate button
+        cy.get('@upperValidateBtnContainer')
+          .find(this.Element.validateIcon)
+          .should('exist')
+          .should('be.visible')
+
+        //step 3: validating visibility && correctness of validate text in validate button
+        cy.get('@upperValidateBtnContainer')
+          .find(this.Element.ActionbtnTxt)
+          .should('exist')
+          .should('be.visible')
+          .invoke('text')
+          .then((txt) => {
+            
+                softAssert(
+                () => expect(txt).to.eq('Validate'),
+                `Upper Validate Button Text match`
+                )
+               
+          })
+
+
+        //step 4: traversing from lower action button Container to lower validate button 
+        cy.get(this.Element.bottomActionContainer)
+          .children()
+          .eq(1)
+          .as('lowerValidateBtnContainer')
+
+        //step 5: validating visiblity of icon in print button
+        cy.get('@lowerValidateBtnContainer')
+          .find(this.Element.validateIcon)
+          .should('exist')
+          .should('be.visible')
+
+        //step 6: validating visibility && correctness of validate text in validate button
+        cy.get('@lowerValidateBtnContainer')
+          .find(this.Element.ActionbtnTxt)
+          .should('exist')
+          .should('be.visible')
+          .invoke('text')
+          .then((txt) => {
+            
+                softAssert(
+                () => expect(txt).to.eq('Validate'),
+                `lower Validate Button Text match`
+                )
+               
+          })
+          
+    }
+
+
+    static verifyTheCollapseAllButtonVisibility(){
+
+    cy.get(this.Element.topActionContainer2)
+      .children()
+      .eq(0)
+      .as('collapseALLContainer')
+
+     cy.get('@collapseALLContainer')
+      .find(this.Element.collpaseAllIcon)
+      .should('exist')
+      .should('be.visible')
+      .should('have.attr', 'style', 'padding-right: 5px !important;')
+      .should('have.css', 'color', 'rgb(0, 97, 221)')
+
+    cy.get('@collapseALLContainer')
+      .find(this.Element.ActionbtnTxt)
+      .should('have.css', 'color', 'rgb(0, 97, 221)')
+      .should('be.visible')
+      .invoke('text')
+      .then((txt) => {
+
+        softAssert(
+                () => expect(txt).to.eq('Collapse All'),
+                `Collapse All Text match`
+            )
+
+      })
+    }
+
+
+    static verifyTheCollapseAllButtonFunctionality() {
+
+
+  clickOnElement(this.Element.collpaseAllIcon)
+
+  cy.wait(5000)
+ 
+  cy.get(this.Element.sectionPanel).as('sectionPanelContainer')
+ 
+  cy.get('@sectionPanelContainer').then($sections => {
+    const sectionCount = $sections.length
+ 
+    for (let i = 0; i < sectionCount; i++) {
+ 
+      cy.get('@sectionPanelContainer')
+        .eq(i)
+        .then($section => {
+ 
+          //  aria-expanded should be false
+          softAssert(
+            () => expect($section.attr('aria-expanded')).to.eq('false'),
+            `Section ${i + 1}: Section Panel Closed`
+          )
+ 
+          //  background color check
+          softAssert(
+            () => expect($section.css('background-color')).to.eq('rgb(99, 112, 133)'),
+            `Section ${i + 1}: Section Panelbackground color should be Matched`
+          )
+ 
+          //  Collapse icon (must exist exactly once)
+          const collapseIcon = $section.find(this.Element.sectionPanelCollapseIcon)
+ 
+          softAssert(
+            () => expect(collapseIcon.length).to.eq(1),
+            `Section ${i + 1}: Exactly one collapse icon should exist`
+          )
+ 
+          softAssert(
+            () => expect(collapseIcon).to.be.visible,
+            `Section ${i + 1}: Collapse icon should be visible`
+          )
+ 
+          softAssert(
+            () => expect(collapseIcon.css('color')).to.eq('rgb(255, 255, 255)'),
+            `Section ${i + 1}: Collapse icon color should be white`
+          )
+ 
+          // Check icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find('.fa.fa-lg.fa-check-circle.float-right').length
+            ).to.eq(1),
+            `Section ${i + 1}: unkown Check icon should exist`
+          )
+
+          softAssert(
+            () => expect($section.find('.fa.fa-lg.fa-check-circle.float-right')).not.to.be.visible,
+            `Section ${i + 1}: unkown Check icon should NOT visible`
+          )
+ 
+          //  Expand icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelExpandIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Expand icon should NOT exist`
+          )
+ 
+          //  Error icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelErrorIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Error icon should NOT exist`
+          )
+
+           //  Green icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelGreenIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Green icon should NOT exist`
+          )
+ 
+        })
+    }
+  })
+}
+
+
+static verifyTheExpandAllButtonVisibility() {
+ 
+  cy.get(this.Element.topActionContainer2)
+    .children()
+    .eq(1)
+    .as('expandALLContainer')
+
+  cy.get('@expandALLContainer')
+  .find(this.Element.expandAllAndExpandIncompletedIcon)
+  .should('exist')
+  .should('be.visible')
+ 
+  cy.get('@expandALLContainer').then($container => {
+ 
+    // Expand All icon
+    const expandIcon = $container.find(this.Element.expandAllAndExpandIncompletedIcon)
+ 
+ 
+    softAssert(
+      () => expect(expandIcon.attr('style')).to.contain('padding-right: 5px'),
+      'Expand All icon should have padding-right: 5px'
+    )
+ 
+    softAssert(
+      () => expect(expandIcon.css('color')).to.eq('rgb(0, 97, 221)'),
+      'Expand All icon color should be matched'
+    )
+
+     })
+ 
+    // Expand All text
+    cy.get('@expandALLContainer')
+    .find(this.Element.ActionbtnTxt)
+    .should('exist')
+    .should('be.visible')
+
+
+    cy.get('@expandALLContainer').then($container => {
+ 
+    // Expand All icon
+    const expandText = $container.find(this.Element.ActionbtnTxt)
+ 
+    softAssert(
+      () => expect(expandText.css('color')).to.eq('rgb(0, 97, 221)'),
+      'Expand All text color should be matched'
+    )
+ 
+    softAssert(
+      () => expect(expandText.text()).to.eq('Expand All'),
+      'Expand All button text should match'
+    )
+  }) 
+}
+
+
+
+
+
+
+static verifyTheExpandAllButtonFunctionality() {
+
+  
+  cy.get(this.Element.expandAllAndExpandIncompletedIcon)
+  .eq(0)
+  .click()
+
+  cy.wait(5000)
+ 
+  cy.get(this.Element.sectionPanel).as('sectionPanelContainer')
+ 
+  cy.get('@sectionPanelContainer').then($sections => {
+    const sectionCount = $sections.length
+ 
+    for (let i = 0; i < sectionCount; i++) {
+ 
+      cy.get('@sectionPanelContainer')
+        .eq(i)
+        .then($section => {
+ 
+          //  aria-expanded should be false
+          softAssert(
+            () => expect($section.attr('aria-expanded')).to.eq('true'),
+            `Section ${i + 1}: Section Panel Open`
+          )
+ 
+          //  background color check
+          softAssert(
+            () => expect($section.css('background-color')).to.eq('rgb(99, 112, 133)'),
+            `Section ${i + 1}: Section Panelbackground color should be Matched`
+          )
+ 
+          //  Collapse icon (must exist exactly once)
+          const expandIcon = $section.find(this.Element.sectionPanelExpandIcon)
+ 
+          softAssert(
+            () => expect(expandIcon.length).to.eq(1),
+            `Section ${i + 1}: Exactly one collapse icon should exist`
+          )
+ 
+          softAssert(
+            () => expect(expandIcon).to.be.visible,
+            `Section ${i + 1}: Collapse icon should be visible`
+          )
+ 
+          softAssert(
+            () => expect(expandIcon.css('color')).to.eq('rgb(255, 255, 255)'),
+            `Section ${i + 1}: Collapse icon color should be white`
+          )
+ 
+          // Check icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find('.fa.fa-lg.fa-check-circle.float-right').length
+            ).to.eq(1),
+            `Section ${i + 1}: unkown Check icon should exist`
+          )
+
+          softAssert(
+            () => expect($section.find('.fa.fa-lg.fa-check-circle.float-right')).not.to.be.visible,
+            `Section ${i + 1}: unkown Check icon should NOT visible`
+          )
+ 
+          //  Expand icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelCollapseIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Expand icon should NOT exist`
+          )
+ 
+          //  Error icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelErrorIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Error icon should NOT exist`
+          )
+
+           //  Green icon should NOT exist
+          softAssert(
+            () => expect(
+              $section.find(this.Element.sectionPanelGreenIcon).length
+            ).to.eq(0),
+            `Section ${i + 1}: Green icon should NOT exist`
+          )
+ 
+        })
+    }
+  })
+}
+
+
+
+static verifyTheExpandIncompletedButtonVisibilty() {
+
+   cy.get(this.Element.topActionContainer2)
+    .children()
+    .eq(2)
+    .as('expandIncompletedContainer')
+
+  cy.get('@expandIncompletedContainer')
+  .find(this.Element.expandAllAndExpandIncompletedIcon)
+  .should('exist')
+  .should('be.visible')
+ 
+  cy.get('@expandIncompletedContainer').then($container => {
+ 
+    // Expand All icon
+    const expandIcon = $container.find(this.Element.expandAllAndExpandIncompletedIcon)
+ 
+ 
+    softAssert(
+      () => expect(expandIcon.attr('style')).to.contain('padding-right: 5px'),
+      'Expand All icon should have padding-right: 5px'
+    )
+ 
+    softAssert(
+      () => expect(expandIcon.css('color')).to.eq('rgb(0, 97, 221)'),
+      'Expand All icon color should be matched'
+    )
+
+     })
+ 
+    // Expand All text
+    cy.get('@expandIncompletedContainer')
+    .find(this.Element.ActionbtnTxt)
+    .should('exist')
+    .should('be.visible')
+
+
+    cy.get('@expandIncompletedContainer').then($container => {
+ 
+    // Expand All icon
+    const expandIncompletedText = $container.find(this.Element.ActionbtnTxt)
+ 
+    softAssert(
+      () => expect(expandIncompletedText.css('color')).to.eq('rgb(0, 97, 221)'),
+      'Expand All text color should be matched'
+    )
+ 
+    softAssert(
+      () => expect(expandIncompletedText.text()).to.eq('Expand Incompleted'),
+      'Expand All button text should match'
+    )
+  })
+}
+
+ 
+
+
+
+  }
+ 
