@@ -1,3 +1,18 @@
+Hi Neeraj Sir,
+
+Today’s update:
+
+Prepared test data for LC Aerosols – Special Hazards, focusing on organizing the required inputs for the form
+
+Connected with Aman as suggested by Mannu and took a brief overview of manual testing, understanding the basic process and workflow
+
+Connected with Anshul Jain and received IMT access, which will help in proceeding with further Selenium-related work
+
+
+
+
+
+
 import { normalizeText, getPageTitle, clickOnElement } from "../utils/commonUtils";
 import { softAssert } from "../support/softAsserts";
 
